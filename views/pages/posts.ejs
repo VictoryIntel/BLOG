@@ -1,6 +1,5 @@
 
-<%- include("../partials/header.ejs",{style:"app.css"})%>
-<div class="content">
+<%- include("../partials/header.ejs")%>
    <div class="thumbnail-grid">
         <%posts.forEach(post=>{%>
            <div class="thumbnail">
@@ -14,5 +13,4 @@
            </div>
         <% })%>
    </div>
-  </div>
 <%- include("../partials/footer.ejs")%>
