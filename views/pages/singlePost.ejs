@@ -1,11 +1,12 @@
 <%- include("../partials/header.ejs")%>
 <div class="container singlePost">
     <div class="thumbnail">
-      <h1><em><%=post.title%></em></h1>
+      <h1><%=post.title%></h1>
       <section>
         <img src="<%=post.image%>" alt="<%=post.title%>">
       </section>
       <h4>By: <%=post.author%></h4>
+      <h6><em>created: <%=post.date.toDateString()%></em></h6>
       <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque, debitis sit quae odio sed aliquid sapiente exercitationem non iste sunt repellendus amet eius alias laudantium atque similique accusantium vel. Totam ea quam vel ad eos expedita, explicabo 
           minus esse sunt?</p>
     </div>

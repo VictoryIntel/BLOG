@@ -58,14 +58,15 @@ body {
   }
   /* Styling the singlePost page */
   .singlePost img{
-    width: 100%;
+    width: 80%;
     border-radius: 5px;
     padding:10px;
+    margin:0 auto;
   }
   .singlePost h1{
     color: #9e5113;
   }
-  .singlePost h4, .singlePost p {
+  .singlePost h4, .singlePost p, .singlePost h6 {
     color: rgba(75, 61, 61, 0.801);
   }
 
@@ -109,7 +110,12 @@ input[type=text], select, textarea {
   border-radius: 4px;
   resize: vertical;
 }
-
+input[type=date]{
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
 label {
   padding: 12px 12px 12px 0;
   display: inline-block;
