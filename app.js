@@ -37,7 +37,7 @@ app.set("view engine", "ejs");
 
 // })
 // list all the posts on pets
-app.get("/", (req, res)=>{
+app.get("/posts", (req, res)=>{
     Post.find({}, (err, posts)=>{
         if(err){
             console.log(err)
@@ -51,18 +51,30 @@ app.get("/", (req, res)=>{
 app.get("/posts/new", (req, res)=>{
     res.render("pages/new");
 })
-
-app.post("/posts/new", (req, res)=>{
+// create a new post
+app.post("/posts", (req, res)=>{
     const post = req.body.post;
     Post.create(post,(err, newPost)=>{
         if(err){
             console.log(err)
         } else{
             console.log(newPost)
+            res.redirect("/posts")
+        }
+    })  
+})
+
+// single blog post page
+app.get("/posts/:id", (req, res)=>{
+    let id = req.params.id;
+    Post.findById(id,(err, dbData)=>{
+        if(err){
+            console.log(err)
+        } else{
+            console.log(dbData);
+            res.render("pages/singlePost", {post:dbData})
         }
     })
-
-    res.redirect("/")
 })
 app.listen(3000, ()=>{
     console.log("Server running")

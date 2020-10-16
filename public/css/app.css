@@ -52,8 +52,21 @@ body {
   .thumbnail-grid img {
       width:100%;
   }
+
   .thumbnail h4 {
       color:rgba(247, 252, 252, 0.952);
+  }
+  /* Styling the singlePost page */
+  .singlePost img{
+    width: 100%;
+    border-radius: 5px;
+    padding:10px;
+  }
+  .singlePost h1{
+    color: #9e5113;
+  }
+  .singlePost h4, .singlePost p {
+    color: rgba(75, 61, 61, 0.801);
   }
 
   @media screen and (max-width: 1200px) {
@@ -82,6 +95,10 @@ body {
     border-radius: 5px;
     border: 2px solid #9e5113;
     padding:5px;
+}
+.thumbnail a{
+  color:#d88b4d;
+  text-decoration: none;
 }
 
 /* New.ejs styles */
