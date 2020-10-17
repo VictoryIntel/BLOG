@@ -1,0 +1,25 @@
+<%- include("../partials/header.ejs")%>
+<h3 style="text-align: center;">Blog Posts</h3>
+<div class="container-table">
+    <table>
+      <tr>
+        <th>Image</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Date</th>
+        <th></th>
+        <th></th>
+      </tr>
+        <%posts.forEach(post=>{%>
+              <tr>
+                <td><img src="<%=post.image%>" alt="<%=post.title%>" style="width: 120px; margin: 0; padding: 0;"></td>
+                <td><%=post.title%></td>
+                <td><%=post.author%></td>
+                <td><%=post.date.toDateString()%></td>
+                <td><a type="button" href="/settings/posts/<%=post.id%>/edit" style="text-decoration: none;">Edit</a></td>
+                <td><a type="button" href="" style="text-decoration: none; color: brown;">Delete</a></td>
+              </tr>
+         <% })%>
+    </table>
+</div>
+<%- include("../partials/footer.ejs")%>

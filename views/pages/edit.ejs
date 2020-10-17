@@ -1,0 +1,63 @@
+<%- include("../partials/header.ejs")%>
+<div class="container">
+    <form action="/settings/posts/<%=post._id %>?_method=PUT" method="POST">
+      <div class="row">
+        <div class="col-25">
+          <label for="title">Title</label>
+        </div>
+        <div class="col-75">
+          <input type="text" id="title" name= post[title] value=<%=post.title%>>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-25">
+          <label for="author">Author</label>
+        </div>
+        <div class="col-75">
+          <input type="text" id="author" name= post[author] value=<%=post.author%>>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-25">
+          <label for="image">Image</label>
+        </div>
+        <div class="col-75">
+          <input type="text" id="image" name= post[image] value=<%=post.image%>>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-25">
+          <label for="dateInput">Date</label>
+        </div>
+        <div class="col-75">
+          <!-- <input type="date" id="dateInput" name= post[date] value=<%=post.date%>> -->
+        </div>
+      </div>
+      <!-- <div class="row">
+        <div class="col-25">
+          <label for="country">Country</label>
+        </div>
+        <div class="col-75">
+          <select id="country" name="country">
+            <option value="australia">Australia</option>
+            <option value="canada">Canada</option>
+            <option value="usa">USA</option>
+          </select>
+        </div>
+      </div> -->
+      <div class="row">
+        <div class="col-25">
+          <label for="subject">Subject</label>
+        </div>
+        <div class="col-75">
+          <textarea id="subject" name="subject" placeholder="Write something.." style="height:200px"><%=post.subject%></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <input type="submit" value="Submit">
+      </div>
+    </form>
+  </div>
+
+
+<%- include("../partials/footer.ejs")%>

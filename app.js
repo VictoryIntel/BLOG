@@ -2,15 +2,19 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const Post = require("./models/post");
+const methodOverride = require("method-override");
 //Set up mongoose connection
 const mongoose = require('mongoose');
-const mongoDB = 'mongodb+srv://victory1:optiplex@cluster0.1ayns.mongodb.net/My_blog?retryWrites=true&w=majority';
+const mongoDB = 'mongodb://127.0.0.1/My_blog';
+// const mongoDB = 'mongodb+srv://victory1:optiplex@cluster0.1ayns.mongodb.net/My_blog?retryWrites=true&w=majority';
 mongoose.connect(mongoDB, { useNewUrlParser: true , useUnifiedTopology: true});
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 // use body-parser
 app.use(bodyParser.urlencoded({extended:true}));
 
+//use method override
+app.use(methodOverride("_method"))
 
 // Direct express to the public folder
 app.use(express.static(__dirname + '/public'));
@@ -73,6 +77,41 @@ app.get("/posts/:id", (req, res)=>{
         } else{
             console.log(dbData);
             res.render("pages/singlePost", {post:dbData})
+        }
+    })
+})
+//setting ejs
+app.get("/settings/posts", function (req, res) {
+    // get blogs from database
+    Post.find({}, function (err, posts) {
+      if (err) {
+        console.log("Error: Unable to retreive blog data.")
+      } else {
+        res.render("pages/settings-posts", { posts: posts })
+      }
+    })
+  })
+
+  //update ejs
+app.get("/settings/posts/:id/edit",(req, res)=>{
+    let id = req.params.id;
+    Post.findById(id, (err, post)=>{
+        if(err){
+            console.log(err)
+        } else{
+            res.render("pages/edit", {post:post})
+        }
+    })
+});   
+app.put("/settings/posts/:id", (req, res)=>{
+    let id = req.params.id;
+    let update = req.body.post
+    Post.findByIdAndUpdate(id, update, (err, updatedPost)=>{
+        if(err){
+            console.log(err)
+        }else{
+            console.log(updatedPost)
+            res.redirect("/posts/" + req.params.id)
         }
     })
 })
