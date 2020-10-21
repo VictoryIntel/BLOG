@@ -3,10 +3,11 @@ const app = express();
 const bodyParser = require("body-parser");
 const Post = require("./models/post");
 const methodOverride = require("method-override");
+const seedDB = require("./seeds");
 //Set up mongoose connection
 const mongoose = require('mongoose');
-const mongoDB = 'mongodb://127.0.0.1/My_blog';
-// const mongoDB = 'mongodb+srv://victory1:optiplex@cluster0.1ayns.mongodb.net/My_blog?retryWrites=true&w=majority';
+// const mongoDB = 'mongodb://127.0.0.1/My_blog';
+const mongoDB = 'mongodb+srv://victory1:optiplex@cluster0.1ayns.mongodb.net/My_blog?retryWrites=true&w=majority';
 mongoose.connect(mongoDB, { useNewUrlParser: true , useUnifiedTopology: true});
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
@@ -22,25 +23,11 @@ app.use(express.static(__dirname + '/public'));
 
 // set the view engine to ejs
 app.set("view engine", "ejs");
-// let posts = [
-//     {title: "Widgets and You", author: "Kennedy Omondi", image: "https://images.unsplash.com/photo-1548767797-d8c844163c4c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1351&q=80"},
-//     {title: "How to Train Your Cat", author: "Salome Mberia", image: "https://images.unsplash.com/photo-1444212477490-ca407925329e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1400&q=80"},
-//     {title: "Don't Put That There", author: "Aisha Njenga", image: "https://images.unsplash.com/photo-1548767797-d8c844163c4c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1351&q=80"},
-//     {title: "Amateur Chainsaw Juggling", author: "Wycliff Mutobo", image: "https://images.unsplash.com/photo-1444212477490-ca407925329e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1400&q=80"},
-//     {title: "The Legend of the BeeGees", author: "Eusebius Likoko", image: "https://images.unsplash.com/photo-1548767797-d8c844163c4c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1351&q=80"}
-// ]
 
-// Post.create({title: "Widgets and You", author: "Kennedy Omondi", image: "https://images.unsplash.com/photo-1548767797-d8c844163c4c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1351&q=80"},
-// (err, post)=>{
-//     if(err){
-//         console.log(err)
-//     }else{
-//         console.log("Post successfully saved to database");
-//         console.log(post)
-//     }
 
-// })
-// list all the posts on pets
+// run seed database function.
+
+seedDB();
 app.get("/posts", (req, res)=>{
     Post.find({}, (err, posts)=>{
         if(err){
@@ -71,7 +58,9 @@ app.post("/posts", (req, res)=>{
 // single blog post page
 app.get("/posts/:id", (req, res)=>{
     let id = req.params.id;
-    Post.findById(id,(err, dbData)=>{
+    Post.findById(id).
+    populate("comments").
+    exec((err, dbData)=>{
         if(err){
             console.log(err)
         } else{
@@ -87,7 +76,7 @@ app.get("/settings/posts", function (req, res) {
       if (err) {
         console.log("Error: Unable to retreive blog data.")
       } else {
-        res.render("pages/settings-posts", { posts: posts })
+        res.render("pages/settings-posts", {posts: posts})
       }
     })
   })
@@ -99,19 +88,33 @@ app.get("/settings/posts/:id/edit",(req, res)=>{
         if(err){
             console.log(err)
         } else{
-            res.render("pages/edit", {post:post})
+            res.render("pages/edit", {post:post});
         }
     })
-});   
+}); 
+
+//updating a post
 app.put("/settings/posts/:id", (req, res)=>{
     let id = req.params.id;
     let update = req.body.post
     Post.findByIdAndUpdate(id, update, (err, updatedPost)=>{
         if(err){
-            console.log(err)
+            console.log(err);
         }else{
             console.log(updatedPost)
-            res.redirect("/posts/" + req.params.id)
+            res.redirect("/posts/" + req.params.id);
+        }
+    })
+})
+
+// deleting a blog
+app.delete("/posts/:id", (req, res)=>{
+    let id = req.params.id;
+    Post.findByIdAndRemove(id, (err)=>{
+        if(err){
+            console.log("failed to delete");
+        }else{
+            res.redirect("/settings/posts");
         }
     })
 })

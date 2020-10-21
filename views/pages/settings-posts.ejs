@@ -17,7 +17,11 @@
                 <td><%=post.author%></td>
                 <td><%=post.date.toDateString()%></td>
                 <td><a type="button" href="/settings/posts/<%=post.id%>/edit" style="text-decoration: none;">Edit</a></td>
-                <td><a type="button" href="" style="text-decoration: none; color: brown;">Delete</a></td>
+                <td>
+                  <form action="/posts/<%=post._id%>?_method=DELETE" method="POST">
+                    <button style="color:brown; font-size:large; padding:12px; border-radius:5px;">Delete</button>
+                  </form>
+                </td>
               </tr>
          <% })%>
     </table>

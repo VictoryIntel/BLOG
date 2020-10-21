@@ -10,5 +10,12 @@
       <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque, debitis sit quae odio sed aliquid sapiente exercitationem non iste sunt repellendus amet eius alias laudantium atque similique accusantium vel. Totam ea quam vel ad eos expedita, explicabo 
           minus esse sunt?</p>
     </div>
+    <div class="comment-box">
+      <h2>Comments</h2>
+      <%post.comments.forEach((comment)=>{%>
+        <h4><%=comment.author%></h4>
+        <p><%=comment.content%></p>
+      <%})%>
+    </div>
 </div>
 <%- include("../partials/footer.ejs")%>
