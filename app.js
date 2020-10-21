@@ -1,15 +1,20 @@
-const express = require("express");
-const app = express();
-const bodyParser = require("body-parser");
-const Post = require("./models/post");
-const methodOverride = require("method-override");
-const seedDB = require("./seeds");
-//Set up mongoose connection
-const mongoose = require('mongoose');
+const express            = require("express"),
+      app                = express(),
+      bodyParser         = require("body-parser"),
+      Post               = require("./models/post"),
+      Comment            = require("./models/comments"),
+      User            = require("./models/user"),
+      methodOverride     = require("method-override"),
+      mongoose           = require('mongoose'),
+      LocalStrategy      = require("passport-local"),
+      seedDB             = require("./seeds");
+
+
+
 // const mongoDB = 'mongodb://127.0.0.1/My_blog';
 const mongoDB = 'mongodb+srv://victory1:optiplex@cluster0.1ayns.mongodb.net/My_blog?retryWrites=true&w=majority';
 mongoose.connect(mongoDB, { useNewUrlParser: true , useUnifiedTopology: true});
-var db = mongoose.connection;
+let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 // use body-parser
 app.use(bodyParser.urlencoded({extended:true}));
@@ -20,7 +25,26 @@ app.use(methodOverride("_method"))
 // Direct express to the public folder
 app.use(express.static(__dirname + '/public'));
 
+// ***************************
+// PASSPORT CONFIGURATION
+// ***************************
 
+app.use(require("express-session")({
+    secret: "Never play anything the same way twice.",
+    resave: false,
+    saveUninitialized: false
+}));
+/*  PASSPORT SETUP  */
+
+const passport = require('passport');
+
+app.use(passport.initialize());
+app.use(passport.session());
+// the following User.methods are provided by
+// plugin(passportLocalMongoose) in the users.js model module
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 // set the view engine to ejs
 app.set("view engine", "ejs");
 
@@ -117,6 +141,13 @@ app.delete("/posts/:id", (req, res)=>{
             res.redirect("/settings/posts");
         }
     })
+})
+app.get("/login", (req, res)=>{
+    res.render("pages/login")
+});
+
+app.get("/register", (req, res)=>{
+    res.render("pages/register")
 })
 app.listen(3000, ()=>{
     console.log("Server running")
